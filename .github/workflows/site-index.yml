@@ -1,0 +1,27 @@
+name: Site Index Page
+
+on:
+  push:
+    branches:
+      - main  # Set this to the branch you want to trigger the workflow
+
+jobs:
+
+  site-main:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2 # Fetch only the last 2 commits to check for changes in version.ini
+
+      - name: Site Main
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -B site origin/main
+          mv -f polyu-ttb-v1.6.1-min.html index.html
+          git add -A
+          git commit -m "index.html"
+          git push -f origin site
